@@ -5,8 +5,18 @@ on:
 jobs:
   JS_pipeline:
     runs-on: ubuntu-latest
+    container: 
+      image: mcr.microsoft.com/playwright:v1.29.1-focal
+      env:
+       ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
-      - name: Say hello
-        run: echo Hello
+      - name: Run Tests
+        run: | 
+        | echo "Start the shopping store app"
+        | chmod +x ./shopping-store-linux-amd64
+        | ./shopping-store-linux-amd64 &
+        | npm ci
+        | echo "Start the shopping store app"
+        | npm run test:ci
